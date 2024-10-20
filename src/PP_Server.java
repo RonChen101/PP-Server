@@ -21,7 +21,7 @@ class receiveMessage extends Thread {
             // 文件操作相关的类
             File log = new File("./resources/log.json");
             FileInputStream readLog = new FileInputStream("./resources/log.json");
-            FileOutputStream writeLog = new FileOutputStream("./resources/log.json");
+            FileOutputStream writeLog;
 
             // Json相关的类
             JSONObject inputJson;
@@ -34,7 +34,6 @@ class receiveMessage extends Thread {
                 // 检查log.json
                 if (!log.exists()) {
                     log.createNewFile();
-                    writeLog.write("{\"data\":[]}".getBytes());
                 }
                 // 接收数据
                 UDPsocket.receive(UDPpacket);
@@ -47,6 +46,14 @@ class receiveMessage extends Thread {
 
                 // 读本地Json
                 readLog.read(buf);
+
+                // 判断是否为空
+                writeLog = new FileOutputStream("./resources/log.json");
+                if (buf[0] == 0) {
+                    writeLog.write("{\"data\":[]}".getBytes());
+                    readLog.read(buf);
+                }
+
                 logJson = new JSONObject(new String(buf));
 
                 // 编辑本地Json
@@ -54,7 +61,8 @@ class receiveMessage extends Thread {
                 myManager.add(logJson, time, content);
 
                 // 写数据
-                writeLog.write(logJson.toString().getBytes());
+                writeLog.write(logJson.toString(4).getBytes());
+                writeLog.close();
             }
         } catch (Exception e) {
             System.err.println(e);
