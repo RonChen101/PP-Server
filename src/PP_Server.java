@@ -20,7 +20,7 @@ class receiveMessage extends Thread {
 
             // 文件操作相关的类
             File log = new File("./resources/log.json");
-            FileInputStream readLog = new FileInputStream("./resources/log.json");
+            FileInputStream readLog;
             FileOutputStream writeLog;
 
             // Json相关的类
@@ -45,14 +45,15 @@ class receiveMessage extends Thread {
                 content = inputJson.getString("content");
 
                 // 读本地Json
+                readLog = new FileInputStream("./resources/log.json");
                 readLog.read(buf);
-
                 // 判断是否为空
                 writeLog = new FileOutputStream("./resources/log.json");
                 if (buf[0] == 0) {
                     writeLog.write("{\"data\":[]}".getBytes());
                     readLog.read(buf);
                 }
+                readLog.close();
 
                 logJson = new JSONObject(new String(buf));
 
