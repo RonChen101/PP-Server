@@ -15,12 +15,14 @@ import org.json.JSONObject;
 
 public class Manager {
     private String name;
+    private JSONObject json;
 
-    public Manager(String name) {
+    public Manager(String name, JSONObject json) {
         this.name = name;
+        this.json = json;
     }
 
-    public JSONObject add(JSONObject json, String time, String content) {
+    public JSONObject add(String time, String content) {
         JSONArray data = json.getJSONArray("data");
         JSONObject user;
         boolean flag = true;

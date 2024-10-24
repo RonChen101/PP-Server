@@ -1,3 +1,4 @@
+
 import org.json.JSONObject;
 import java.io.*;
 import log.Manager;
@@ -19,7 +20,8 @@ class receiveMessage extends Thread {
             DatagramPacket UDPpacket = new DatagramPacket(buf, buf.length);
 
             // 文件操作相关的类
-            File log = new File("./resources/log.json");
+            File folder = new File("resources");
+            File log = new File("resources/log.json");
             FileInputStream readLog;
             FileOutputStream writeLog;
 
@@ -33,7 +35,11 @@ class receiveMessage extends Thread {
             while (true) {
                 // 检查log.json
                 if (!log.exists()) {
+                    folder.mkdir();
                     log.createNewFile();
+                    writeLog = new FileOutputStream("resources/log.json");
+                    writeLog.write("{\"data\":[]}".getBytes());
+                    writeLog.close();
                 }
                 // 接收数据
                 UDPsocket.receive(UDPpacket);
@@ -44,24 +50,21 @@ class receiveMessage extends Thread {
                 time = inputJson.getString("time");
                 content = inputJson.getString("content");
 
-                // 读本地Json
-                readLog = new FileInputStream("./resources/log.json");
-                readLog.read(buf);
-                // 判断是否为空
-                writeLog = new FileOutputStream("./resources/log.json");
-                if (buf[0] == 0) {
-                    writeLog.write("{\"data\":[]}".getBytes());
-                    readLog.read(buf);
-                }
-                readLog.close();
+                // 打印用户名和时间
+                System.out.println(userName + "\t" + time);
 
+                // 读本地Json
+                readLog = new FileInputStream("resources/log.json");
+                readLog.read(buf);
+                readLog.close();
                 logJson = new JSONObject(new String(buf));
 
                 // 编辑本地Json
-                myManager = new Manager(userName);
-                myManager.add(logJson, time, content);
+                myManager = new Manager(userName, logJson);
+                myManager.add(time, content);
 
                 // 写数据
+                writeLog = new FileOutputStream("resources/log.json");
                 writeLog.write(logJson.toString(4).getBytes());
                 writeLog.close();
             }
