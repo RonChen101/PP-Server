@@ -13,12 +13,15 @@ package json;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Manager {
     public JSONObject json;
 
     public Manager() {
-
+        json = new JSONObject("{\"data\":[]}");
     }
 
     public Manager(String name, String time, String content) {
@@ -48,6 +51,73 @@ public class Manager {
         } catch (Exception e) {
             System.err.println(e);
         }
+    }
+
+    // 取补集
+    public void takingTheComplement(JSONObject bufJson) {
+        JSONArray bufData;
+        JSONObject bufUser;
+        JSONArray bufLog;
+        Date bufDate;
+
+        // 临时json
+        JSONObject tempJson;
+        JSONArray tempData;
+        JSONArray tempLog;
+
+        // 本地
+        JSONObject localUser;
+        JSONArray localLog;
+        Date localDate;
+
+        // 时间格式化类
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+
+        // 提取data
+        bufData = bufJson.getJSONArray("data");
+
+        // 提取用户需要的数据
+        tempJson = new JSONObject("{\"data\":[]}");
+        tempData = tempJson.getJSONArray("data");
+        boolean flag = true;
+        for (int i = 0; i < json.getJSONArray("data").length(); i++) {
+            localUser = json.getJSONArray("data").getJSONObject(i);
+            System.out.println(localUser.toString(4));
+            tempLog = new JSONArray();
+            for (int j = 0; j < bufData.length(); j++) {
+                bufUser = bufData.getJSONObject(j);
+                if (localUser.getString("userName").equals(bufUser.getString("userName"))) {
+                    localLog = localUser.getJSONArray("log");
+                    bufLog = bufUser.getJSONArray("log");
+                    for (int k = 0; k < localLog.length(); k++) {
+                        try {
+                            localDate = simpleDateFormat.parse(localLog.getJSONObject(k).getString("time"));
+                            bufDate = simpleDateFormat.parse(bufLog.getJSONObject(0).getString("time"));
+                            if (localDate.after(bufDate)) {
+                                tempLog.put(localLog.getJSONObject(k));
+                            }
+                        } catch (Exception e) {
+                            System.err.println(e);
+                        }
+                    }
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag) {
+                localLog = localUser.getJSONArray("log");
+                for (int j = 0; j < localLog.length(); j++) {
+                    tempLog.put(localLog.getJSONObject(j));
+                }
+            } else {
+                flag = true;
+            }
+            tempData.put(
+                    (new JSONObject()
+                            .put("userName", localUser.getString("userName")))
+                            .put("log", new JSONArray(tempLog.toString())));
+        }
+        json = tempJson;
     }
 
     // 提取时间
