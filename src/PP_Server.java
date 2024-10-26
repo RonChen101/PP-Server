@@ -30,9 +30,6 @@ class receiveMessage extends Thread {
                 // 读数据
                 bufJson = new JSONObject(new String(buf));
 
-                // 打印数据
-                System.out.println(bufJson.toString(4));
-
                 // 检查log.json
                 manager.check("log.json");
 
@@ -84,6 +81,9 @@ class receiveUpdate extends Thread {
                 // 读log.json
                 manager.read("log.json");
 
+                // 打印数据
+                System.out.println(bufJson.toString(4));
+
                 // 取补集
                 manager.takingTheComplement(bufJson);
 
@@ -95,9 +95,9 @@ class receiveUpdate extends Thread {
                         port);
 
                 // 打印数据
-                System.out.println("数据");
-                System.out.println(manager.json.toString(4));
-                System.out.println("\n");
+                // System.out.println("数据");
+                // System.out.println(manager.json.toString(4));
+                // System.out.println("\n");
 
                 // 发送数据
                 UDPsocket.send(UDPpacket);

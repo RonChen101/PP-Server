@@ -82,7 +82,6 @@ public class Manager {
         boolean flag = true;
         for (int i = 0; i < json.getJSONArray("data").length(); i++) {
             localUser = json.getJSONArray("data").getJSONObject(i);
-            System.out.println(localUser.toString(4));
             tempLog = new JSONArray();
             for (int j = 0; j < bufData.length(); j++) {
                 bufUser = bufData.getJSONObject(j);
