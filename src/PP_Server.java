@@ -81,7 +81,7 @@ class receiveUpdate extends Thread {
                 // 打印数据
                 System.out.println(inetAddress.getHostAddress());
                 System.out.println(port);
-                System.out.println(bufJson);
+                System.out.println(bufJson.toString(4));
 
                 // 检查log.json
                 manager.check("log.json");
