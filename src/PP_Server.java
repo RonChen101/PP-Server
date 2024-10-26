@@ -110,7 +110,9 @@ class receiveUpdate extends Thread {
 
 public class PP_Server {
     public static void main(String args[]) throws Exception {
-        receiveMessage myReceiveM = new receiveMessage();
-        myReceiveM.start();
+        receiveMessage myReceiveMessage = new receiveMessage();
+        receiveUpdate myReceiveUpdate = new receiveUpdate();
+        myReceiveMessage.start();
+        myReceiveUpdate.start();
     }
 }
