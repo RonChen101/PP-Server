@@ -26,7 +26,7 @@ class receiveMessage extends Thread {
                 UDPsocket.receive(UDPpacket);
 
                 // 读数据
-                json = new JSONObject(buf.toString());
+                json = new JSONObject(new String(buf));
 
                 // 打印数据
                 System.out.println(json.toString(4));
