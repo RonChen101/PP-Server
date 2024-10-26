@@ -99,6 +99,9 @@ class receiveUpdate extends Thread {
                         inetAddress,
                         port);
 
+                // 打印数据
+                System.out.println(manager.json.toString(4));
+
                 // 发送数据
                 UDPsocket.send(UDPpacket);
             }
