@@ -79,9 +79,11 @@ class receiveUpdate extends Thread {
                 bufJson = new JSONObject(new String(buf));
 
                 // 打印数据
+                System.out.println("请求：");
                 System.out.println(inetAddress.getHostAddress());
                 System.out.println(port);
                 System.out.println(bufJson.toString(4));
+                System.out.println("\n");
 
                 // 检查log.json
                 manager.check("log.json");
@@ -100,7 +102,9 @@ class receiveUpdate extends Thread {
                         port);
 
                 // 打印数据
+                System.out.println("数据");
                 System.out.println(manager.json.toString(4));
+                System.out.println("\n");
 
                 // 发送数据
                 UDPsocket.send(UDPpacket);
