@@ -78,13 +78,6 @@ class receiveUpdate extends Thread {
                 // 读数据
                 bufJson = new JSONObject(new String(buf));
 
-                // 打印数据
-                System.out.println("请求：");
-                System.out.println(inetAddress.getHostAddress());
-                System.out.println(port);
-                System.out.println(bufJson.toString(4));
-                System.out.println("\n");
-
                 // 检查log.json
                 manager.check("log.json");
 
