@@ -62,12 +62,13 @@ class receiveUpdate extends Thread {
         try {
             // UDP相关的类
             DatagramSocket UDPsocket = new DatagramSocket(6666);
-            DatagramPacket UDPpacket = new DatagramPacket(buf, buf.length);
+            DatagramPacket UDPpacket;
             InetAddress inetAddress;
             int port;
 
             while (true) {
                 // 接收数据
+		UDPpacket = new DatagramPacket(buf, buf.length);
                 UDPsocket.receive(UDPpacket);
                 inetAddress = UDPpacket.getAddress();
                 port = UDPpacket.getPort();
@@ -81,9 +82,6 @@ class receiveUpdate extends Thread {
                 // 读log.json
                 manager.read("log.json");
 
-                // 打印数据
-                System.out.println(bufJson.toString(4));
-
                 // 取补集
                 manager.takingTheComplement(bufJson);
 
@@ -93,11 +91,6 @@ class receiveUpdate extends Thread {
                         manager.json.toString().getBytes().length,
                         inetAddress,
                         port);
-
-                // 打印数据
-                // System.out.println("数据");
-                // System.out.println(manager.json.toString(4));
-                // System.out.println("\n");
 
                 // 发送数据
                 UDPsocket.send(UDPpacket);
